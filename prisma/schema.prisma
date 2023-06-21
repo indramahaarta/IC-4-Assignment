@@ -1,0 +1,57 @@
+generator client {
+  provider     = "prisma-kysely"
+  output       = "../src/models"
+  fileName     = "model.ts"
+  enumFileName = "enum.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  username String
+  password String
+  Profile  Profile?
+  Article  Article[]
+}
+
+model Profile {
+  id        Int    @id @default(autoincrement())
+  firstname String
+  lastname  String
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
+}
+
+model Article {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  updatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  creator   User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId Int
+  tag       ArticleOnTag[]
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  article ArticleOnTag[]
+}
+
+model ArticleOnTag {
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     Int
+
+  @@id([articleId, tagId])
+}
