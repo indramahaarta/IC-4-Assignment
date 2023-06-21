@@ -9,7 +9,7 @@ import { swaggerDocs } from "./utils/swagger";
 
 dotenv.config();
 const app: Express = express();
-const port = Number(process.env.PORT);
+const port = Number(process.env.APP_PORT);
 app.use(morgan("tiny"));
 app.use(bodyParser.json());
 
