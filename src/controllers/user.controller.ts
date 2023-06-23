@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import db from "../config/db";
+import MailChecker from "mailchecker";
 
 export const singin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -31,7 +32,23 @@ export const singin = async (req: Request, res: Response) => {
 };
 
 export const signup = async (req: Request, res: Response) => {
-  const { username, email, password, firstname, lastname } = req.body;
+  const {
+    username,
+    email,
+    password,
+    firstname,
+    lastname,
+  }: {
+    username: string;
+    email: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+  } = req.body;
+
+  if (!MailChecker.isValid(email)) {
+    return res.status(400).send({ message: "Email is not valid!" });
+  }
 
   await db.transaction().execute(async (trx) => {
     try {
