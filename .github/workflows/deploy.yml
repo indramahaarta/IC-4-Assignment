@@ -20,7 +20,8 @@ jobs:
             cd /home/indramhrt/IC-4-Assignment
             git checkout main
             git pull origin main
-            sudo docker rmi ic-4:latest
+            sudo docker stop ic-4
             sudo docker rm ic-4
+            sudo docker rmi ic-4:latest
             sudo docker build -t ic-4:latest .
             sudo docker run -d -p 8000:8000 --name ic-4 ic-4
