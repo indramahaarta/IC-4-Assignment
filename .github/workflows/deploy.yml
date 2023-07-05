@@ -20,3 +20,7 @@ jobs:
             cd /home/indramhrt/IC-4-Assignment
             git checkout main
             git pull origin main
+            docker rmi ic-4:latest
+            docker rm ic-4
+            docker build -t ic-4:latest .
+            docker run -d -p 8000:8000 --name ic-4 ic-4
